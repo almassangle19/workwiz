@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -139,16 +141,28 @@ public class Dashboard extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home){
-            fragment = new HomeFragment();
+            fragment = new FindJobFragment();
         }
         if (id == R.id.nav_profile) {
             fragment = new MyProfileFragment();
         }
         if (id == R.id.nav_feedback){
-            fragment = new Feedback();
+            fragment = new FeedbackFragment();
         }
         if (id == R.id.nav_logout){
-           FirebaseAuth.getInstance().signOut();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+            builder.setMessage("Are you sure you want to logout?");
+            builder.setPositiveButton("Ok", (dialog, id1) -> {
+
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(),SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            });
+            builder.setNegativeButton("Cancel", (dialog, id12) -> dialog.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
         if (fragment!=null)
         {
